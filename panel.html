@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        body {
+            font-family: "Lucida Grande", sans-serif;
+            font-size: 12px;
+        }
+
+        #requestList td {
+            font-size: 10px;
+        }
+
+        #requestList td:first-child {
+            min-width: 180px;
+            font-size: 12px;
+        }
+
+        #toolbar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            padding: 4px;
+
+            background-color: #fff;
+            border: 1px solid #777;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div id="toolbar">
+        <button id="clearBtn">Clear</button>
+        <label for="autoScroll">Auto scroll</label>
+        <input type="checkbox" id="autoScroll" checked>
+    </div>
+
+    <table id="requestList">
+    </table>
+
+    <script src="querystring.js"></script>
+    <script src="panel.js"></script>
+</body>
+</html>
