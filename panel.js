@@ -20,39 +20,52 @@
                 return;
             }
 
-            var baseURL = data.request.url.substr(0, data.request.url.lastIndexOf('/api/') + 5);
-
-            data.request.postData.params && data.request.postData.params.forEach(function(param) {
-                if(param.name !== 'actions') return;
-
-                var actions = JSON.parse(decodeURIComponent(param.value));
-                actions.forEach(function(action) {
-                    var url = baseURL + action.name;
-                    var params;
-                    if(action.params) {
-                        params = JSON.stringify(action.params);
-                        url += '?' + querystring.stringify(action.params);
-                    }
-
-                    var noxslUrl = url.replace(/\.ru(:\d+)?/g, function(_, port) {
-                        port || (port = ':80');
-                        return '.ru' + port + '80';
-                    });
-                    addListItem(
-                        '<a href="' + url + '" title="' + url + '" target="_blank">' + action.name + '</a>',
-                        '<a href="' + noxslUrl + '" title="' + noxslUrl + '" target="_blank">noxsl</a>',
-                        params);
-                });
+            data.getContent(function(content) {
+                handleRequest(data, JSON.parse(content));
             });
         });
     }
 
-    function addListItem(col1, col2, col3) {
+    function handleRequest(data, res) {
+        var baseURL = data.request.url.substr(0, data.request.url.lastIndexOf('/api/') + 5);
+
+        data.request.postData.params && data.request.postData.params.forEach(function(param) {
+            if(param.name !== 'actions' && param.name !== 'methods') return;
+
+            var actions = JSON.parse(decodeURIComponent(param.value));
+            actions.forEach(function(action, i) {
+                var url = baseURL + action.name;
+                var params;
+                if(action.params) {
+                    params = JSON.stringify(action.params);
+                    url += '?' + querystring.stringify(action.params);
+                }
+
+                var noxslUrl = url.replace(/\.ru(:\d+)?/g, function(_, port) {
+                    port || (port = ':80');
+                    return '.ru' + port + '80';
+                });
+
+                var actionRes = Array.isArray(res)? res[i] : res.data[i];
+                var mainLink = '<a href="' + url + '" title="' + url + '" target="_blank">' + action.name + '</a>';
+                var altLink = '<a href="' + noxslUrl + '" title="' + noxslUrl + '" target="_blank">alt</a>';
+                addListItem(
+                    mainLink + ' ( ' + altLink + ' )',
+                    params,
+                    JSON.stringify(actionRes)
+                );
+            });
+        });
+    }
+
+    function addListItem() {
+        var args = Array.prototype.slice.call(arguments);
         var listItem = document.createElement('tr');
-        listItem.innerHTML =
-            '<td>' + (col1 || '') + '</td>' +
-            '<td>' + (col2 || '') + '</td>' +
-            '<td>' + (col3 || '') + '</td>';
+
+        listItem.innerHTML = args.map(function(arg) {
+            return '<td>' + (arg || '') + '</td>';
+        }).join('');
+
         list.appendChild(listItem);
 
         if(autoScrollCheckbox.checked) {
