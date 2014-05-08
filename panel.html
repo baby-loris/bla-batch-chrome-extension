@@ -10,13 +10,25 @@
 
         #requestList td {
             font-size: 10px;
-
             white-space: nowrap;
+            position: relative;
         }
 
         #requestList td:first-child {
             min-width: 180px;
             font-size: 12px;
+        }
+
+        .batched > td:first-child::before
+        {
+            content: '';
+            position: absolute;
+            top: -11px;
+            left: -5px;
+            height: 21px;
+            width: 10px;
+            border-radius: 4px;
+            border-left: 1px solid black;
         }
 
         #toolbar {

@@ -50,6 +50,7 @@
                 var mainLink = '<a href="' + url + '" title="' + url + '" target="_blank">' + action.name + '</a>';
                 var altLink = '<a href="' + noxslUrl + '" title="' + noxslUrl + '" target="_blank">alt</a>';
                 addListItem(
+                    i === 0? 'first' : 'batched',
                     mainLink + ' ( ' + altLink + ' )',
                     params,
                     JSON.stringify(actionRes)
@@ -61,9 +62,10 @@
     function addListItem() {
         var args = Array.prototype.slice.call(arguments);
         var listItem = document.createElement('tr');
+        listItem.className = args.shift();
 
         listItem.innerHTML = args.map(function(arg) {
-            return '<td>' + (arg || '') + '</td>';
+            return '<td class="' + '">' + (arg || '') + '</td>';
         }).join('');
 
         list.appendChild(listItem);
