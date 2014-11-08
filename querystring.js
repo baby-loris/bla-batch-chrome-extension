@@ -1,7 +1,7 @@
-(function(global) {
+(function (global) {
 
     function addParam(res, name, val) {
-        res.push(encodeURIComponent(name) + '=' + (val == null? '' : encodeURIComponent(val)));
+        res.push(encodeURIComponent(name) + '=' + (val == null ? '' : encodeURIComponent(val)));
     }
 
     global.querystring = {
@@ -11,19 +11,17 @@
          * @param {Object} obj
          * @returns {String}
          */
-        stringify : function(obj) {
+        stringify: function (obj) {
             return Object.keys(obj)
-                .reduce(
-                function(res, name) {
+                .reduce(function (res, name) {
                     var val = obj[name];
                     Array.isArray(val)?
-                        val.forEach(function(val) {
+                        val.forEach(function (val) {
                             addParam(res, name, val);
                         }) :
                         addParam(res, name, val);
                     return res;
-                },
-                [])
+                }, [])
                 .join('&');
         }
     };

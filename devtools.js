@@ -1,4 +1,1 @@
-(function() {
-    chrome.devtools.panels.create('Batch', '', 'panel.html');
-})();
-
+chrome.devtools.panels.create('Batch', '', 'panel.html');

@@ -1,0 +1,168 @@
+/* Common (begin) */
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-size: 12px;
+    font-family: "Lucida Grande", sans-serif;
+}
+
+a {
+    color: #000;
+}
+/* Common (end) */
+
+/* Toolbar (begin) */
+#toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+
+    height: 23px;
+
+    line-height: 23px;
+    vertical-align: middle;
+
+    background-color: #fff;
+}
+
+#clearBtn {
+    width: 13px;
+    height: 13px;
+    margin-bottom: -2px;
+    margin-right: 9px;
+    margin-left: 9px;
+
+    display: inline-block;
+
+    background: url("clear.png") no-repeat;
+}
+
+#clearBtn:hover {
+    background-position: -14px 0;
+}
+
+#requestListHead {
+    font-size: 11px;
+
+    width: 100%;
+    line-height: 12px;
+
+    border-collapse: collapse;
+}
+    #requestListHead th {
+        font-weight: normal;
+
+        padding: 4px;
+
+        text-align: left;
+        vertical-align: bottom;
+
+        border-bottom: solid 1px #D2D2D2;
+        border-right: solid 1px #D2D2D2;
+        background-color: #fff;
+    }
+
+    #requestListHead th:first-child {
+        width: 250px;
+
+        padding-left: 9px;
+    }
+
+    #requestListHead th:last-child {
+        width: 50%;
+
+        border-right: none;
+    }
+/* Toolbar (end) */
+
+/* Table with requests (begin) */
+#requestList {
+    font-size: 11px;
+
+    width: 100%;
+    height: 100%;
+
+    border-collapse: collapse;
+}
+
+#requestList th {
+    height: 42px;
+}
+
+#requestList tbody tr:nth-child(odd) {
+    background-color: #eee;
+}
+
+#requestList td {
+    padding: 4px;
+    max-width: 100px;
+    height: 16px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: top;
+
+    border-right: solid 1px #D2D2D2;
+}
+
+#requestList td:first-child {
+    padding-left: 9px;
+}
+
+#requestList td:last-child {
+    border-right: none;
+}
+
+#requestList tbody tr:last-child {
+    height: 100%;
+
+    background-color: #fff;
+}
+
+#requestList td:first-child {
+    width: 250px;
+}
+
+#requestList td:last-child {
+    width: 50%;
+}
+
+#requestList td {
+    position: relative;
+}
+
+.batch-start td:first-child:before,
+.batch td:first-child:before,
+.batch-end td:first-child:before {
+    position: absolute;
+    top: 0;
+    left: 4px;
+
+    height: 24px;
+    width: 3px;
+
+    content: '';
+
+    border-left: 2px solid #676767;
+}
+
+.batch-start td:first-child:before {
+    top: 4px;
+
+    border-radius: 4px;
+}
+
+.batch-end td:first-child:before {
+    top: -4px;
+
+    border-radius: 4px;
+}
+/* Table with requests (end) */

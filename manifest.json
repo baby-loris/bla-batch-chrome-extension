@@ -1,8 +1,8 @@
 {
-  "name": "batch",
-  "version": "0.1",
+  "name": "bla-batch",
+  "version": "0.2",
   "minimum_chrome_version": "10.0",
-  "description": "",
+  "description": "Shows batch as a bunch of separated requests",
   "devtools_page": "devtools.html",
   "permissions": [
     "tabs",

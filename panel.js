@@ -1,77 +1,116 @@
-(function() {
-    var list = document.getElementById('requestList');
-
-    var clearBtn = document.getElementById('clearBtn');
-    clearBtn.addEventListener('click', function() {
-       list.innerHTML = '';
-    });
-
+(function () {
+    var list = document.getElementById('requestListBody');
+    var clearButton = document.getElementById('clearBtn');
     var autoScrollCheckbox = document.getElementById('autoScroll');
 
-    addRequestListener();
+    var TABLE_PLACEHOLDER = '<tr><td></td><td></td><td></td></tr>'; // Placeholder for drawning vertical lines
+    var BLA_BATCH_NAME = 'bla-batch';
+    var RESPONSE_MAX_LENGTH = 1000;
+    var METHOD_VIEW_TEMPLATE = [
+        '<tr class="{{className}}">',
+            '<td>',
+                '<a href="{{url}}" title="{{url}}" target="_blank">{{method}}</a>',
+            '</td>',
+            '<td>{{request}}</td>',
+            '<td>{{response}}</td>',
+        '</tr>'
+    ].join('');
 
-    function addRequestListener() {
-        chrome.devtools.network.onRequestFinished.addListener(function(data) {
-            if(data.request.method !== 'POST' ||
-               data.request.headers.every(function(h) {
-                   return h.name !== 'X-Requested-With' || h.value !== 'XMLHttpRequest'
-               }) ||
-               data.request.url.indexOf('/api/batch') === -1) {
+    // Set listeners
+    clearButton.addEventListener('click', onClearButtonClick);
+    chrome.devtools.network.onRequestFinished.addListener(onRequestFinished);
+    onClearButtonClick();
+
+    /**
+     * Clears request table.
+     */
+    function onClearButtonClick() {
+       list.innerHTML = TABLE_PLACEHOLDER;
+    };
+
+    /**
+     * Request handler.
+     *
+     * @param {Request} data
+     */
+    function onRequestFinished(data) {
+        var request = data.request;
+        if (isBatchRequest(request)) {
+            data.getContent(function (content) {
+                handleRequest(request, JSON.parse(content));
+            });
+        }
+    };
+
+    /**
+     * Check if a request is bla-batch or not.
+     *
+     * @param {Object} request
+     * @return {Boolean}
+     */
+    function isBatchRequest(request) {
+        var isPostRequest = request.method === 'POST';
+        var isAjaxRequest = request.headers.some(function (header) {
+            return header.name === 'X-Requested-With' || header.value === 'XMLHttpRequest';
+        });
+        var isBlaBatchName = request.url.indexOf(BLA_BATCH_NAME) !== -1;
+
+        return isPostRequest && isAjaxRequest && isBlaBatchName;
+    }
+
+    /**
+     * @param {Object} request
+     * @param {Object} response
+     */
+    function handleRequest(request, response) {
+        var baseURL = request.url.replace(BLA_BATCH_NAME, '');
+        var params = JSON.parse(request.postData.text) || {};
+
+        Object.keys(params).forEach(function (name) {
+            // bla-batch should have methods parameter
+            if (name !== 'methods') {
                 return;
             }
 
-            data.getContent(function(content) {
-                handleRequest(data, JSON.parse(content));
-            });
+            var showBatching = params[name].length > 1;
+            var items = params[name]
+                .map(function (action, index) {
+                    var urlParams = action.params ? '?' + querystring.stringify(action.params) : '';
+                    return renderListItem({
+                        className: showBatching ?
+                            !index ? 'batch-start' :
+                                index === params[name].length - 1 ?
+                                    'batch-end' :
+                                    'batch' :
+                            '',
+                        method: action.method,
+                        url: baseURL + action.method + urlParams,
+                        request: action.params,
+                        response: Array.isArray(response) ? response[index] : response.data[index]
+                    });
+                })
+                .join('');
+
+            list.innerHTML = items + list.innerHTML;
+
+            if (autoScrollCheckbox.checked) {
+                list.firstChild.scrollIntoView(false);
+            }
         });
     }
 
-    function handleRequest(data, res) {
-        var baseURL = data.request.url.substr(0, data.request.url.lastIndexOf('/api/') + 5);
-
-        data.request.postData.params && data.request.postData.params.forEach(function(param) {
-            if(param.name !== 'actions' && param.name !== 'methods') return;
-
-            var actions = JSON.parse(decodeURIComponent(param.value));
-            actions.forEach(function(action, i) {
-                var url = baseURL + action.name;
-                var params;
-                if(action.params) {
-                    params = JSON.stringify(action.params);
-                    url += '?' + querystring.stringify(action.params);
-                }
-
-                var noxslUrl = url.replace(/\.ru(:\d+)?/g, function(_, port) {
-                    port || (port = ':80');
-                    return '.ru' + port + '80';
-                });
-
-                var actionRes = Array.isArray(res)? res[i] : res.data[i];
-                var mainLink = '<a href="' + url + '" title="' + url + '" target="_blank">' + action.name + '</a>';
-                var altLink = '<a href="' + noxslUrl + '" title="' + noxslUrl + '" target="_blank">alt</a>';
-                addListItem(
-                    i === 0? 'first' : 'batched',
-                    mainLink + ' ( ' + altLink + ' )',
-                    params,
-                    JSON.stringify(actionRes)
-                );
-            });
-        });
-    }
-
-    function addListItem() {
-        var args = Array.prototype.slice.call(arguments);
-        var listItem = document.createElement('tr');
-        listItem.className = args.shift();
-
-        listItem.innerHTML = args.map(function(arg) {
-            return '<td class="' + '">' + (arg || '') + '</td>';
-        }).join('');
-
-        list.appendChild(listItem);
-
-        if(autoScrollCheckbox.checked) {
-            listItem.scrollIntoView(false);
-        }
+    /**
+     * Renders list item with method information.
+     *
+     * @param {Object} data
+     * @returns {String}
+     */
+    function renderListItem(data) {
+        return METHOD_VIEW_TEMPLATE
+            .replace('{{className}}', data.className)
+            .replace('{{method}}', data.method)
+            .replace('{{url}}', data.url, 'g')
+            .replace('{{request}}', data.request ? JSON.stringify(data.request) : '')
+            .replace('{{response}}', JSON.stringify(data.response).slice(0, RESPONSE_MAX_LENGTH));
     }
 })();

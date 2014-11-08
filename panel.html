@@ -1,56 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
-    <style>
-        body {
-            font-family: "Lucida Grande", sans-serif;
-            font-size: 12px;
-        }
-
-        #requestList td {
-            font-size: 10px;
-            white-space: nowrap;
-            position: relative;
-        }
-
-        #requestList td:first-child {
-            min-width: 180px;
-            font-size: 12px;
-        }
-
-        .batched > td:first-child::before
-        {
-            content: '';
-            position: absolute;
-            top: -11px;
-            left: -5px;
-            height: 21px;
-            width: 10px;
-            border-radius: 4px;
-            border-left: 1px solid black;
-        }
-
-        #toolbar {
-            position: fixed;
-            top: 0;
-            right: 0;
-            padding: 4px;
-
-            background-color: #fff;
-            border: 1px solid #777;
-            z-index: 10;
-        }
-    </style>
+    <link rel="stylesheet" href="panel.css"/>
 </head>
 <body>
     <div id="toolbar">
-        <button id="clearBtn">Clear</button>
-        <label for="autoScroll">Auto scroll</label>
+        <div id="clearBtn" title="Clear console log"></div>
         <input type="checkbox" id="autoScroll" checked>
+        <label for="autoScroll">Auto scroll</label>
+        <table id="requestListHead">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Parameters</th>
+                    <th>Response</th>
+                </tr>
+            </thead>
+        </table>
     </div>
-
     <table id="requestList">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="requestListBody">
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
     </table>
 
     <script src="querystring.js"></script>
