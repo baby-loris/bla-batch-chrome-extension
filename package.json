@@ -1,0 +1,12 @@
+{
+    "author": "Igor Agarlev <yaroger@yandex-team.ru>",
+    "description": "Shows batch as a bunch of separated requests",
+    "name": "bla-batch-chrome-extension",
+    "devDependencies": {
+        "jscs": "1.5.8",
+        "jshint": "2.5.2"
+    },
+    "scripts": {
+        "test": "jscs . && jshint *.js"
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "browser": true,
+    "curly": true,
+    "eqeqeq": true,
+    "immed": true,
+    "maxlen": 120,
+    "newcap": true,
+    "noarg": true,
+    "noempty": true,
+    "nonew": true,
+    "predef": ["chrome", "querystring"],
+    "quotmark": "single",
+    "trailing": true,
+    "undef": true,
+    "unused": true
+}

@@ -1,6 +1,7 @@
 (function (global) {
 
     function addParam(res, name, val) {
+        /* jshint eqnull: true */
         res.push(encodeURIComponent(name) + '=' + (val == null ? '' : encodeURIComponent(val)));
     }
 
@@ -12,15 +13,17 @@
          * @returns {String}
          */
         stringify: function (obj) {
-            return Object.keys(obj)
-                .reduce(function (res, name) {
-                    var val = obj[name];
-                    Array.isArray(val)?
-                        val.forEach(function (val) {
-                            addParam(res, name, val);
-                        }) :
-                        addParam(res, name, val);
-                    return res;
+           return Object.keys(obj)
+                .reduce(function (result, name) {
+                    var value = obj[name];
+                    if (Array.isArray(value)) {
+                        value.forEach(function (value) {
+                            addParam(result, name, value);
+                        });
+                    } else {
+                        addParam(result, name, value);
+                    }
+                    return result;
                 }, [])
                 .join('&');
         }

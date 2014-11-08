@@ -26,7 +26,7 @@
      */
     function onClearButtonClick() {
        list.innerHTML = TABLE_PLACEHOLDER;
-    };
+    }
 
     /**
      * Request handler.
@@ -40,7 +40,7 @@
                 handleRequest(request, JSON.parse(content));
             });
         }
-    };
+    }
 
     /**
      * Check if a request is bla-batch or not.
