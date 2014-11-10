@@ -10,8 +10,8 @@ Then install the extenstion.
 http://developer.chrome.com/extensions/getstarted.html#unpacked
 
 ## Authors
-  * Igor Agarlaev
-  * Alexander Tarmolov (add bla support)
+  * Igor Agarlev
+  * Alexander Tarmolov (bla support)
 
 ## Licence
 MIT

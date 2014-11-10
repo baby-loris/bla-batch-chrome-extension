@@ -91,10 +91,11 @@
                 })
                 .join('');
 
-            list.innerHTML = items + list.innerHTML;
+            list.removeChild(list.lastChild);
+            list.innerHTML = list.innerHTML + items + TABLE_PLACEHOLDER;
 
             if (autoScrollCheckbox.checked) {
-                list.firstChild.scrollIntoView(false);
+                list.lastChild.scrollIntoView(false);
             }
         });
     }
