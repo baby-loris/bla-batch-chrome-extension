@@ -64,40 +64,47 @@
      */
     function handleRequest(request, response) {
         var baseURL = request.url.replace(BLA_BATCH_NAME, '');
-        var params = JSON.parse(request.postData.text) || {};
 
-        Object.keys(params).forEach(function (name) {
-            // bla-batch should have methods parameter
-            if (name !== 'methods') {
-                return;
-            }
+        // support urlencoded post bodies
+        var params = request.postData.params ?
+            request.postData.params.reduce(function (result, param) {
+                result[param.name] = param.value;
+                return result;
+            }, {}) :
+            JSON.parse(request.postData.text) || {};
 
-            var showBatching = params[name].length > 1;
-            var items = params[name]
-                .map(function (action, index) {
-                    var urlParams = action.params ? '?' + querystring.stringify(action.params) : '';
-                    return renderListItem({
-                        className: showBatching ?
-                            !index ? 'batch-start' :
-                                index === params[name].length - 1 ?
-                                    'batch-end' :
-                                    'batch' :
-                            '',
-                        method: action.method,
-                        url: baseURL + action.method + urlParams,
-                        request: action.params,
-                        response: Array.isArray(response) ? response[index] : response.data[index]
-                    });
-                })
-                .join('');
+        // bla-batch should have methods parameter
+        var batch = params.methods;
+        if (!batch) {
+            return;
+        }
 
-            list.removeChild(list.lastChild);
-            list.innerHTML = list.innerHTML + items + TABLE_PLACEHOLDER;
+        var methods = typeof batch === 'string' ? JSON.parse(decodeURIComponent(batch)) : batch;
+        var showBatching = methods.length > 1;
+        var items = methods
+            .map(function (action, index) {
+                var urlParams = action.params ? '?' + querystring.stringify(action.params) : '';
+                return renderListItem({
+                    className: showBatching ?
+                        !index ? 'batch-start' :
+                            index === methods.length - 1 ?
+                                'batch-end' :
+                                'batch' :
+                        '',
+                    method: action.method,
+                    url: baseURL + action.method + urlParams,
+                    request: action.params,
+                    response: Array.isArray(response) ? response[index] : response.data[index]
+                });
+            })
+            .join('');
 
-            if (autoScrollCheckbox.checked) {
-                list.lastChild.scrollIntoView(false);
-            }
-        });
+        list.removeChild(list.lastChild);
+        list.innerHTML = list.innerHTML + items + TABLE_PLACEHOLDER;
+
+        if (autoScrollCheckbox.checked) {
+            list.lastChild.scrollIntoView(false);
+        }
     }
 
     /**
