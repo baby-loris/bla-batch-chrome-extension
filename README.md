@@ -2,12 +2,13 @@
 ![Screenshot](screenshot.png)
 
 ## Installation
-Clone repository first.
-```
-git clone https://github.com/baby-loris/bla-batch-chrome-extension.git ~/bla-batch-chrome-extension
-```
-Then install the extenstion.
-http://developer.chrome.com/extensions/getstarted.html#unpacked
+ 1. Clone this repo.
+ 2. Open Chrome and go to `chrome://chrome/extensions/`.
+ 3. Enable "Developer mode".
+ 4. Click "Load unpacked extension".
+ 5. Select the `extension` folder in this repo.
+
+For more information see http://developer.chrome.com/extensions/getstarted.html#unpacked.
 
 ## Authors
   * Igor Agarlev

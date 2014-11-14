@@ -7,6 +7,6 @@
         "jshint": "2.5.2"
     },
     "scripts": {
-        "test": "jscs . && jshint *.js"
+        "test": "jscs . && jshint extension/js/*.js"
     }
 }

@@ -23,6 +23,9 @@
     chrome.devtools.network.onRequestFinished.addListener(onRequestFinished);
     onClearButtonClick();
 
+    /**
+     * @param {DOMEvent} event
+     */
     function onListClick(event) {
         if (event.target.classList.contains('copy')) {
             copyTextToClipboard(event.target.parentNode.firstChild.innerHTML);
@@ -127,7 +130,7 @@
             .replace('{{className}}', data.className)
             .replace('{{method}}', data.method)
             .replace(/\{\{url\}\}/g, data.url)
-            .replace('{{request}}', data.request? JSON.stringify(data.request) : '')
+            .replace('{{request}}', data.request ? JSON.stringify(data.request) : '')
             .replace('{{response}}', response.slice(0, RESPONSE_MAX_LENGTH))
             .replace('{{full-response}}', response);
     }
