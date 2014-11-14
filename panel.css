@@ -139,6 +139,20 @@ a {
     position: relative;
 }
 
+#requestList td .copy {
+    display: none;
+    position: absolute;
+    right: 5px;
+}
+
+#requestList td:hover .copy {
+    display: inline-block;
+}
+
+.hidden {
+    display: none;
+}
+
 .batch-start td:first-child:before,
 .batch td:first-child:before,
 .batch-end td:first-child:before {
