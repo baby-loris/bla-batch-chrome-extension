@@ -2,7 +2,8 @@
 
     function addParam(res, name, val) {
         /* jshint eqnull: true */
-        res.push(encodeURIComponent(name) + '=' + (val == null ? '' : encodeURIComponent(val)));
+        var value = typeof value === 'object' ? JSON.stringify(val) : val;
+        res.push(encodeURIComponent(name) + '=' + (value == null ? '' : encodeURIComponent(value)));
     }
 
     global.querystring = {
