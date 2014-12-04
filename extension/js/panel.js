@@ -4,7 +4,7 @@
     var autoScrollCheckbox = document.getElementById('autoScroll');
 
     var TABLE_PLACEHOLDER = '<tr><td></td><td></td><td></td></tr>'; // Placeholder for drawning vertical lines
-    var BLA_BATCH_NAME = 'bla-batch';
+    var BLA_BATCH_NAME = 'batch';
     var RESPONSE_MAX_LENGTH = 1000;
     var COPY_BUTTON_TEMPLATE = '<button class="copy">copy</button>';
     var METHOD_VIEW_TEMPLATE = [
